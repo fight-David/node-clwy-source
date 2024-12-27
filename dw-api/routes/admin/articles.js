@@ -1,21 +1,47 @@
 const express = require('express');
 const router = express.Router();
 const { Article } = require('../../models')
+const { Op } = require('sequelize')
 
-/* GET home page. */
+// query article list
 router.get('/', async function (req, res, next) {
     try {
+        const query = req.query
+
+        // The current page. If not passed, the default is the first page.
+        const currentPage = Math.abs(Number(query.currentPage)) || 1
+        // How many data items are displayed per page? If not passed, 10 items will be displayed.
+        const pageSize = Math.abs(Number(query.pageSize)) || 10
+
+        // Calculating offset
+        const offset = (currentPage - 1) * pageSize
+
         const condition = {
-            order: [['id', 'desc']]
+            order: [['id', 'desc']],
+            limit: pageSize,
+            offset,
+        }
+        if (query.title) {
+            condition.where = {
+                title: {
+                    [Op.like]: `%${query.title}%`
+                }
+            }
         }
 
-        const articles = await Article.findAll(condition)
+        // const articles = await Article.findAll(condition)
+        const { count, rows } = await Article.findAndCountAll(condition)
 
         res.json({  // The default status code for success is 200
             status: true,
             message: 'query successfully',
             data: {
-                articles
+                rows,
+                pagination: {
+                    total: count,
+                    currentPage,
+                    pageSize
+                }
             }
         })
     } catch (err) {
@@ -27,7 +53,7 @@ router.get('/', async function (req, res, next) {
     }
 });
 
-
+// get article
 router.get('/:id', async (req, res, next) => {
     try {
         const { id } = req.params
@@ -76,6 +102,7 @@ router.post('/', async function (req, res, next) {
     }
 })
 
+// delete article
 router.delete('/:id', async function (req, res) {
     try {
         // get article ID
@@ -107,10 +134,7 @@ router.delete('/:id', async function (req, res) {
     }
 });
 
-/**
- * 更新文章
- * PUT /admin/articles/:id
- */
+// update article
 router.put('/:id', async function (req, res) {
     try {
         const { id } = req.params;
