@@ -44,7 +44,6 @@ router.get('/', async function (req, res) {
             };
         }
 
-
         const { count, rows } = await Chapter.findAndCountAll(condition);
         success(res, '查询章节列表成功。', {
             chapters: rows,
@@ -135,7 +134,6 @@ function getCondition() {
     }
 }
 
-
 /**
  * 公共方法：查询当前章节
  */
@@ -150,7 +148,6 @@ async function getChapter(req) {
 
     return chapter;
 }
-
 
 /**
  * 公共方法：白名单过滤

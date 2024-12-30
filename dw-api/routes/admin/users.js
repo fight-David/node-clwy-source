@@ -57,7 +57,6 @@ router.get('/', async function (req, res) {
             };
         }
 
-
         const { count, rows } = await User.findAndCountAll(condition);
         success(res, '查询用户列表成功。', {
             users: rows,

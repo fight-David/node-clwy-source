@@ -50,7 +50,6 @@ router.get('/user', async (req, res) => {
         });
 
         success(res, '查询每月用户数量成功。', { data });
-
     } catch (err) {
         failure(res, error);
     }
