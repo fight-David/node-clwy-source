@@ -11,15 +11,17 @@
   "test": {
     "username": "root",
     "password": null,
-    "database": "dw_api_development",
+    "database": "dw_api_test",
     "host": "localhost",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "+08:00"
   },
   "production": {
     "username": "root",
     "password": null,
-    "database": "dw_api_development",
+    "database": "dw_api_production",
     "host": "localhost",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "+08:00"
   }
 }
