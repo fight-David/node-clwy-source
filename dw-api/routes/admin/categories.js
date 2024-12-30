@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Category } = require('../../models');
+const { Category, Course } = require('../../models');
 const { Op } = require('sequelize');
 const {
     NotFoundError,
@@ -20,7 +20,7 @@ router.get('/', async function (req, res) {
         const offset = (currentPage - 1) * pageSize;
 
         const condition = {
-            order: [['id', 'DESC']],
+            order: [['rank', 'ASC'], ['id', 'ASC']],
             limit: pageSize,
             offset: offset
         };
@@ -99,6 +99,11 @@ router.delete('/:id', async function (req, res) {
     try {
         const category = await getCategory(req);
 
+        const count = await Course.count({ where: { categoryId: req.params.id } });
+        if (count > 0) {
+            throw new Error('当前分类有课程，无法删除。');
+        }
+
         await category.destroy();
         success(res, '删除分类成功。');
     } catch (error) {
@@ -119,6 +124,7 @@ async function getCategory(req) {
 
     return category;
 }
+
 
 /**
  * 公共方法：白名单过滤
