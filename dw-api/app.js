@@ -3,6 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const adminAuth = require('./middlewares/admin-auth');
+const userAuth = require('./middlewares/user-auth');
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
@@ -15,6 +16,14 @@ const adminCoursesRouter = require('./routes/admin/courses');
 const adminChaptersRouter = require('./routes/admin/chapters');
 const adminChartsRouter = require('./routes/admin/charts');
 const adminAuthRouter = require('./routes/admin/auth');
+const categoriesRouter = require('./routes/categories');
+const coursesRouter = require('./routes/courses');
+const chaptersRouter = require('./routes/chapters');
+const articlesRouter = require('./routes/articles');
+const settingsRouter = require('./routes/settings');
+const searchRouter = require('./routes/search');
+const authRouter = require('./routes/auth');
+const likesRouter = require('./routes/likes');
 
 const app = express();
 
@@ -24,8 +33,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 前台路由配置
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/categories', categoriesRouter);
+app.use('/courses', coursesRouter);
+app.use('/chapters', chaptersRouter);
+app.use('/articles', articlesRouter);
+app.use('/settings', settingsRouter);
+app.use('/search', searchRouter);
+app.use('/auth', authRouter);
+app.use('/users', userAuth, usersRouter);
+app.use('/likes', userAuth, likesRouter);
+
 // 后台路由配置
 app.use('/admin/articles', adminAuth, adminArticlesRouter);
 app.use('/admin/categories', adminAuth, adminCategoriesRouter);
