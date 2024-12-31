@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 const { Category, Course } = require('../../models');
 const { Op } = require('sequelize');
+const { NotFoundError } = require('../../utils/errors')
 const {
-    NotFoundError,
     success,
     failure
-} = require('../../utils/response');
+} = require('../../utils/responses');
 
 /**
  * 查询分类列表

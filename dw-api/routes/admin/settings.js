@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { Setting } = require('../../models');
+const { NotFoundError } = require('../../utils/errors')
 const {
-    NotFoundError,
     success,
     failure
-} = require('../../utils/response');
+} = require('../../utils/responses');
 
 /**
  * 查询系统设置详情

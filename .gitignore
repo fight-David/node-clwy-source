@@ -1,3 +1,4 @@
 node_modules
+.env
 
 dw-api/data/mysql/mysql.sock
