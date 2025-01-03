@@ -2,10 +2,10 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const cors = require('cors');
 const adminAuth = require('./middlewares/admin-auth');
 const userAuth = require('./middlewares/user-auth');
 require('dotenv').config();
-const cors = require('cors')
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -25,7 +25,9 @@ const settingsRouter = require('./routes/settings');
 const searchRouter = require('./routes/search');
 const authRouter = require('./routes/auth');
 const likesRouter = require('./routes/likes');
+const postsRouter = require('./routes/posts');
 
+const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -36,7 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const corsOptions = {
     origin: [
         'https://clwy.cn',
-        'http://127.0.0.1:5500/'
+        'http://localhost:63342'
     ],
 }
 app.use(cors(corsOptions));
@@ -51,6 +53,7 @@ app.use('/search', searchRouter);
 app.use('/auth', authRouter);
 app.use('/users', userAuth, usersRouter);
 app.use('/likes', userAuth, likesRouter);
+app.use('/posts', postsRouter);
 
 // 后台路由配置
 app.use('/admin/articles', adminAuth, adminArticlesRouter);
