@@ -5,6 +5,7 @@ const logger = require('morgan');
 const adminAuth = require('./middlewares/admin-auth');
 const userAuth = require('./middlewares/user-auth');
 require('dotenv').config();
+const cors = require('cors')
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -25,14 +26,20 @@ const searchRouter = require('./routes/search');
 const authRouter = require('./routes/auth');
 const likesRouter = require('./routes/likes');
 
-const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+// CORS 跨域配置
+const corsOptions = {
+    origin: [
+        'https://clwy.cn',
+        'http://127.0.0.1:5500/'
+    ],
+}
+app.use(cors(corsOptions));
 // 前台路由配置
 app.use('/', indexRouter);
 app.use('/categories', categoriesRouter);
